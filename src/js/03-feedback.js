@@ -1,76 +1,45 @@
-import throttle from 'lodash.throttle';
-
+import throttle from 'lodash/throttle';
 const fieldDatas = document.querySelector('.feedback-form');
 
-// console.log(fieldDatas);
-const keyForStorage = 'feedback-form-state';
-fieldDatas.addEventListener('input', throttle(handleInput, 500));
-// fieldDatas.addEventListener('input', handleInput);
+
+
+const STORAGE_KEY = 'feedback-form-state';
+fieldDatas.addEventListener('input', throttle(onInputText, 500));
 
 function checkingStorageForDatas() {
-  //   event.preventDefault();
-  const savedDatas = localStorage.getItem(keyForStorage);
+
+  const savedDatas = localStorage.getItem(STORAGE_KEY);
   if (savedDatas) {
     const parsedSavedDatas = JSON.parse(savedDatas);
 
     fieldDatas.email.value = parsedSavedDatas.email;
     fieldDatas.message.value = parsedSavedDatas.message;
     return parsedSavedDatas;
-  } //else return;
+  } 
 }
 checkingStorageForDatas();
-// const inputDatas = { email: '', message: '' };
-// let inputDatas = parsedDaveddatas || { email: '', message: '' };
-// let inputDatas = parsedSavedDatas;
+
 let inputDatas = checkingStorageForDatas() || { email: '', message: '' };
 
-function handleInput(event) {
+function onInputText(event) {
   inputDatas[event.target.name] = event.target.value;
-  localStorage.setItem(keyForStorage, JSON.stringify(inputDatas));
-
-  //==============================================
-  //   event.preventDefault();
-  //   const {
-  //     elements: { email, message },
-  //   } = event.currentTarget;
-
-  //   const inputDatas = {
-  //     email: email.value,
-  //     message: message.value,
-  //   };
-
-  //   console.log(email.value);
-  //   console.log(message.value);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(inputDatas));
 }
 
-fieldDatas.addEventListener('submit', handleSubmit);
-function handleSubmit(event) {
-  event.preventDefault();
-
+fieldDatas.addEventListener('submit', onFormSubmit)
+function onFormSubmit(event){
+  event.preventDefault()
+   
   if (localStorage.length) {
-    const getSavedDatas = localStorage.getItem(keyForStorage);
-    const parsedDaveddatas = JSON.parse(getSavedDatas);
-    console.log(parsedDaveddatas);
-    // return parsedDaveddatas;
+    const getSavedDatas = localStorage.getItem(STORAGE_KEY);
+    const parsedSubmitData = JSON.parse(getSavedDatas);
+    console.log(parsedSubmitData);
+    
   } else {
     return;
   }
-
-  event.currentTarget.reset();
-  localStorage.removeItem(keyForStorage);
+  event.currentTarget.reset()
+   localStorage.removeItem(STORAGE_KEY);
   inputDatas.email = '';
   inputDatas.message = '';
-
-  //====================================
-  //   const {
-  //     elements: { email, message },
-  //   } = event.currentTarget;
-
-  //   console.log(email.value);
-  //   console.log(message.value);
-
-  //   email.value = '';
-  //   message.value = '';
-
-  //   localStorage.clear();
 }
