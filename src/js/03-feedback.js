@@ -10,6 +10,9 @@ function checkingStorageForDatas() {
 
   const savedDatas = localStorage.getItem(STORAGE_KEY);
   if (savedDatas) {
+    // fieldDatas.value = savedDatas;
+ 
+  
     const parsedSavedDatas = JSON.parse(savedDatas);
 
     fieldDatas.email.value = parsedSavedDatas.email;
